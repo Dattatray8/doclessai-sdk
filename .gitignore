@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables (Critical for DoclessAI security)
+.env
+.env.*
+
+# Logs and system files
+*.log
+.DS_Store

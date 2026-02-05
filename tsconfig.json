@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    /* Environment Settings */
+    "target": "ES2022",                // Solid baseline for modern Node/Browsers
+    "module": "NodeNext",              // Required for modern Node.js ESM/CJS logic
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],          // Added DOM if you plan to fetch in browsers
+    "skipLibCheck": true,
+
+    /* File Layout */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Outputs for SDKs */
+    "sourceMap": true,                 // Helps users debug your SDK
+    "declaration": true,               // Generates .d.ts files
+    "declarationMap": true,            // Links types to source code
+    "emitDeclarationOnly": false,      // tsup will handle the actual emit
+
+    /* Strictness & Reliability */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "isolatedModules": true,           // Required for fast bundlers like esbuild/tsup
+    "verbatimModuleSyntax": true,      // "What you see is what you get" imports
+
+    /* Style & Compatibility */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleDetection": "force",
+    "jsx": "react-jsx"                 // Ready for your future UI components
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
