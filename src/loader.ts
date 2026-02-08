@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import ChatWidget from './widget';
+import ChatWidget from './widget.js';
 
 const init = () => {
     const script = document.currentScript;

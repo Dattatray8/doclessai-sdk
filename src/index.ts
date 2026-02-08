@@ -1,3 +1,3 @@
 // src/index.ts
-export * from './client';
-export { default as ChatWidget } from './widget';
+export * from './client.js';
+export { default as ChatWidget } from './widget.js';

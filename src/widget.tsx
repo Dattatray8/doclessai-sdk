@@ -1,8 +1,8 @@
 'use client'
 
 import {useState, useRef, useEffect, useMemo} from "react";
-import {DoclessClient} from "./client";
-import toast from "react-hot-toast";
+import {DoclessClient} from "./client.js";
+import { toast, Toaster } from "react-hot-toast";
 
 interface Message {
     role: 'user' | 'assistant';
@@ -52,6 +52,7 @@ export default function ChatWidget({name = 'Assistant', appKey}: { name?: string
 
     return (
         <div style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
+            <Toaster position="top-center" reverseOrder={false} />
             {/* --- Floating Chat Icon --- */}
             <svg
                 width="60"
