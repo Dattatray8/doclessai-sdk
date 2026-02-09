@@ -18,7 +18,7 @@ export class DoclessClient {
 
   constructor(config: DoclessConfig) {
     this.appKey = config.appKey;
-    this.baseUrl = config.baseUrl || "http://localhost:3000/api/v1";
+    this.baseUrl = config.baseUrl || "https://doclessai.vercel.app/api/v1";
     this.timeout = config.timeout || 30000;
   }
 
