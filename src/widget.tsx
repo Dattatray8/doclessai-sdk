@@ -3,12 +3,14 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { DoclessClient } from "./client.js";
 import { toast, Toaster } from "react-hot-toast";
-import ReactMarkdown from 'react-markdown'; 
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
     role: 'user' | 'assistant';
     content: string;
     image?: string;
+    route?: string | null;
+    elementId?: string | null;
 }
 
 export default function ChatWidget({ name = 'Assistant', appKey }: { name?: string, appKey: string }) {
@@ -40,17 +42,19 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
         const userMsg = input.trim();
         const fileToUpload = selectedFile;
 
-        setInput(""); 
+        setInput("");
         setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
         setIsTyping(true);
 
         try {
             const res = await ai.ask(userMsg, fileToUpload || undefined);
             setSelectedFile(null);
-            setMessages(prev => [...prev, { 
-                role: 'assistant', 
-                content: res.res, 
-                image: res.image!
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: res.res,
+                image: res.image!,
+                route: res.route,
+                elementId: res.elementId
             }]);
         } catch (error: any) {
             toast.error(error?.message || "Something went wrong");
@@ -63,8 +67,7 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
     return (
         <div style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
             <Toaster position="top-center" reverseOrder={false} />
-            
-            {/* 2. Added Markdown CSS to your global style block */}
+
             <style>
                 {`
                     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
@@ -74,13 +77,24 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
                     .chat-bubble { animation: float 2s ease-in-out infinite; }
                     .robot-eye { animation: blink 3s ease-in-out infinite; }
 
-                    /* Markdown Styling */
-                    .markdown-container p { margin: 0 0 12px 0; line-height: 1.5; }
-                    .markdown-container p:last-child { margin-bottom: 0; }
-                    .markdown-container ul, .markdown-container ol { margin: 10px 0; padding-left: 20px; }
-                    .markdown-container li { margin-bottom: 6px; line-height: 1.4; }
-                    .markdown-container strong { font-weight: 700; color: #111827; }
-                    .markdown-container a { color: #4f46e5; text-decoration: underline; }
+                    .markdown-container {
+                        word-break: break-word;
+                    }
+
+                    .markdown-container strong {
+                        font-weight: 700;
+                        color: #111827;
+                    }
+
+                    .markdown-container a {
+                        color: #4f46e5;
+                        text-decoration: underline;
+                    }
+
+                    .markdown-container pre {
+                        white-space: pre-wrap;
+                        word-wrap: break-word;
+                    }
                 `}
             </style>
 
@@ -114,7 +128,7 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
 
             {openChatBubble && (
                 <div style={{ position: 'fixed', bottom: '20px', right: '20px', width: 'min(400px, 90vw)', height: 'min(600px, 85vh)', backgroundColor: '#fff', boxShadow: '0 12px 40px rgba(79, 70, 229, 0.25)', borderRadius: '16px', display: 'flex', flexDirection: 'column', zIndex: 10000, overflow: 'hidden', border: '1px solid #e5e7eb', animation: 'fadeIn 0.2s ease-out' }}>
-                    
+
                     {/* Header */}
                     <div style={{ backgroundColor: "#4f46e5", padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#fff' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -128,12 +142,12 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
                     <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: '#f9fafb' }}>
                         {messages.map((msg, index) => (
                             <div key={index} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <div style={{ 
-                                    backgroundColor: msg.role === 'user' ? '#4f46e5' : '#fff', 
-                                    color: msg.role === 'user' ? '#fff' : '#374151', 
-                                    padding: '12px 16px', 
-                                    borderRadius: '12px', 
-                                    fontSize: '14px', 
+                                <div style={{
+                                    backgroundColor: msg.role === 'user' ? '#4f46e5' : '#fff',
+                                    color: msg.role === 'user' ? '#fff' : '#374151',
+                                    padding: '12px 16px',
+                                    borderRadius: '12px',
+                                    fontSize: '14px',
                                     border: msg.role === 'user' ? 'none' : '1px solid #e5e7eb',
                                     boxShadow: msg.role === 'user' ? '0 2px 4px rgba(79,70,229,0.2)' : '0 1px 2px rgba(0,0,0,0.05)'
                                 }}>
@@ -142,11 +156,79 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
                                             <img src={msg.image} onClick={() => setZoomedImage(msg.image!)} style={{ width: '100%', borderRadius: '8px', cursor: 'zoom-in' }} alt="Reference" />
                                         </div>
                                     )}
-                                    
+
                                     {/* 3. Logic to render Markdown for Assistant or Plain Text for User */}
                                     {msg.role === 'assistant' ? (
                                         <div className="markdown-container">
-                                            <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                            <ReactMarkdown
+                                                components={{
+                                                    p: ({ children }) => <p style={{ marginBottom: '12px', lineHeight: '1.6' }}>{children}</p>,
+                                                    ul: ({ children }) => <ul style={{ listStyleType: 'disc', marginLeft: '20px', marginBottom: '12px' }}>{children}</ul>,
+                                                    ol: ({ children }) => <ol style={{ listStyleType: 'decimal', marginLeft: '20px', marginBottom: '12px' }}>{children}</ol>,
+                                                    li: ({ children }) => <li style={{ marginBottom: '4px' }}>{children}</li>,
+                                                    h1: ({ children }) => <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '16px 0 8px' }}>{children}</h1>,
+                                                    h2: ({ children }) => <h2 style={{ fontSize: '1.1rem', fontWeight: 'bold', margin: '14px 0 7px' }}>{children}</h2>,
+                                                    h3: ({ children }) => <h3 style={{ fontSize: '1rem', fontWeight: 'bold', margin: '12px 0 6px' }}>{children}</h3>,
+                                                    code: ({ node, inline, className, children, ...props }: any) => {
+                                                        return inline ? (
+                                                            <code style={{ backgroundColor: '#f3f4f6', padding: '2px 5px', borderRadius: '4px', fontSize: '13px', color: '#e03e2d', fontFamily: 'monospace' }} {...props}>
+                                                                {children}
+                                                            </code>
+                                                        ) : (
+                                                            <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', margin: '12px 0', overflowX: 'auto' }}>
+                                                                <code style={{ fontSize: '13px', color: '#1e293b', fontFamily: 'monospace', whiteSpace: 'pre' }} {...props}>
+                                                                    {children}
+                                                                </code>
+                                                            </div>
+                                                        );
+                                                    },
+                                                    blockquote: ({ children }) => (
+                                                        <blockquote style={{ borderLeft: '4px solid #4f46e5', paddingLeft: '12px', color: '#4b5563', fontStyle: 'italic', margin: '12px 0' }}>
+                                                            {children}
+                                                        </blockquote>
+                                                    ),
+                                                    table: ({ children }) => (
+                                                        <div style={{ overflowX: 'auto', margin: '12px 0' }}>
+                                                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>{children}</table>
+                                                        </div>
+                                                    ),
+                                                    th: ({ children }) => <th style={{ border: '1px solid #e5e7eb', padding: '8px', backgroundColor: '#f9fafb', textAlign: 'left' }}>{children}</th>,
+                                                    td: ({ children }) => <td style={{ border: '1px solid #e5e7eb', padding: '8px' }}>{children}</td>,
+                                                }}
+                                            >
+                                                {msg.content}
+                                            </ReactMarkdown>
+                                            {msg.route && (
+                                                <div style={{ marginTop: '12px', borderTop: '1px solid #f3f4f6', paddingTop: '10px' }}>
+                                                    <button
+                                                        onClick={() => {
+                                                            window.location.href = msg.route!;
+                                                        }}
+                                                        style={{
+                                                            display: 'inline-flex',
+                                                            alignItems: 'center',
+                                                            gap: '6px',
+                                                            backgroundColor: '#4f46e5',
+                                                            color: 'white',
+                                                            padding: '8px 14px',
+                                                            borderRadius: '8px',
+                                                            fontSize: '13px',
+                                                            fontWeight: 500,
+                                                            border: 'none',
+                                                            cursor: 'pointer',
+                                                            transition: 'background 0.2s',
+                                                        }}
+                                                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4338ca'}
+                                                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4f46e5'}
+                                                    >
+                                                        Explore Page
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                                                            <polyline points="7 7 17 7 17 17"></polyline>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     ) : (
                                         <div style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</div>

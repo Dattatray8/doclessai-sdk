@@ -6,7 +6,7 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "homepage": "https://doclessai.com",
+  "homepage": "https://doclessai.vercel.app/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Dattatray8/doclessai-sdk.git"
