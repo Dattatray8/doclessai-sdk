@@ -36,7 +36,7 @@ export class DoclessClient {
         signal: controller.signal,
         headers: {
           "X-SDK-Name": "@doclessai/sdk",
-          "X-SDK-Version": "0.3.3",
+          "X-SDK-Version": "0.3.4",
         },
         body: formData,
       });
