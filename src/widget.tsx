@@ -13,6 +13,36 @@ interface Message {
     elementId?: string | null;
 }
 
+const highlightElement = (id?: string | null) => {
+    if (!id) return;
+
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+    });
+
+    el.classList.add("docless-highlight");
+
+    setTimeout(() => {
+        el.classList.remove("docless-highlight");
+    }, 3000);
+};
+
+const navigateAndHighlight = (route?: string | null, elementId?: string | null) => {
+    if (route && window.location.pathname !== route) {
+        window.location.href = route;
+
+        setTimeout(() => {
+            highlightElement(elementId);
+        }, 700);
+    } else {
+        highlightElement(elementId);
+    }
+};
+
 export default function ChatWidget({ name = 'Assistant', appKey }: { name?: string, appKey: string }) {
     const [openChatBubble, setOpenChatBubble] = useState<boolean>(false);
     const [input, setInput] = useState("");
@@ -64,6 +94,28 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
         }
     };
 
+    const btnPrimary = {
+        backgroundColor: '#4f46e5',
+        color: 'white',
+        padding: '8px 14px',
+        borderRadius: '8px',
+        fontSize: '13px',
+        fontWeight: 500,
+        border: 'none',
+        cursor: 'pointer'
+    };
+
+    const btnSecondary = {
+        backgroundColor: '#eef2ff',
+        color: '#4338ca',
+        padding: '8px 14px',
+        borderRadius: '8px',
+        fontSize: '13px',
+        fontWeight: 500,
+        border: '1px solid #c7d2fe',
+        cursor: 'pointer'
+    };
+
     return (
         <div style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
             <Toaster position="top-center" reverseOrder={false} />
@@ -94,6 +146,18 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
                     .markdown-container pre {
                         white-space: pre-wrap;
                         word-wrap: break-word;
+                    }
+                    
+                    @keyframes pulseHighlight {
+                        0% { box-shadow: 0 0 0 0 rgba(99,102,241,0.6); }
+                        70% { box-shadow: 0 0 0 12px rgba(99,102,241,0); }
+                        100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+                    }
+
+                    .docless-highlight {
+                        animation: pulseHighlight 1.5s ease-out 2;
+                        outline: 3px solid #6366f1;
+                        border-radius: 8px;
                     }
                 `}
             </style>
@@ -198,35 +262,34 @@ export default function ChatWidget({ name = 'Assistant', appKey }: { name?: stri
                                             >
                                                 {msg.content}
                                             </ReactMarkdown>
-                                            {msg.route && (
-                                                <div style={{ marginTop: '12px', borderTop: '1px solid #f3f4f6', paddingTop: '10px' }}>
-                                                    <button
-                                                        onClick={() => {
-                                                            window.location.href = msg.route!;
-                                                        }}
-                                                        style={{
-                                                            display: 'inline-flex',
-                                                            alignItems: 'center',
-                                                            gap: '6px',
-                                                            backgroundColor: '#4f46e5',
-                                                            color: 'white',
-                                                            padding: '8px 14px',
-                                                            borderRadius: '8px',
-                                                            fontSize: '13px',
-                                                            fontWeight: 500,
-                                                            border: 'none',
-                                                            cursor: 'pointer',
-                                                            transition: 'background 0.2s',
-                                                        }}
-                                                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4338ca'}
-                                                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4f46e5'}
-                                                    >
-                                                        Explore Page
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                            <line x1="7" y1="17" x2="17" y2="7"></line>
-                                                            <polyline points="7 7 17 7 17 17"></polyline>
-                                                        </svg>
-                                                    </button>
+                                            {(msg.route || msg.elementId) && (
+                                                <div style={{
+                                                    marginTop: '12px',
+                                                    borderTop: '1px solid #f3f4f6',
+                                                    paddingTop: '10px',
+                                                    display: 'flex',
+                                                    gap: '8px',
+                                                    flexWrap: 'wrap'
+                                                }}>
+
+                                                    {msg.route && (
+                                                        <button
+                                                            onClick={() => window.location.href = msg.route!}
+                                                            style={btnPrimary}
+                                                        >
+                                                            Explore Page
+                                                        </button>
+                                                    )}
+
+                                                    {msg.elementId && (
+                                                        <button
+                                                            onClick={() => navigateAndHighlight(msg.route, msg.elementId)}
+                                                            style={btnSecondary}
+                                                        >
+                                                            View
+                                                        </button>
+                                                    )}
+
                                                 </div>
                                             )}
                                         </div>

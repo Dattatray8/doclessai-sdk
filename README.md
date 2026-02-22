@@ -6,7 +6,7 @@ Plug-and-play AI assistants infrastructure as a service. Seamlessly integrate in
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-**Homepage:** [doclessai.com](https://doclessai.vercel.app)
+**Homepage:** [doclessai](https://doclessai.vercel.app)
 
 ## 🚀 Features
 
@@ -40,7 +40,7 @@ export default function App() {
   return (
     <div>
       <h1>My App</h1>
-      <ChatWidget appKey="your-app-key-here" />
+      <ChatWidget appKey="your-app-key-here" name="YOUR_ASSISTANT_NAME" />
     </div>
   );
 }
@@ -56,21 +56,25 @@ import { DoclessClient } from '@doclessai/sdk';
 const client = new DoclessClient({
   appKey: 'your-app-key-here'
 });
+ 
+// Send only query
+const res = await ai.ask(userQuery);
+// Send query with user Image
+const res = await ai.ask(userQuery, ImageFile);
 
-// Ask a question
-const response = await client.ask('user-query');
-console.log(response.res); 
-
-// Ask with image attachment
-const response = await client.ask('user-query',image);
-console.log(response.res);  // text response
-console.log(response.image);  // image url if returned
+// Response format
+{
+    res: string,          // AI response
+    image: string|null,   // image URL if relevant
+    route: string|null,   // app route for navigation
+    elementId: string|null // UI element to highlight
+}
 
 ```
 
 ## 🔗 Resources
 
-- **Homepage:** [doclessai.com](https://doclessai.vercel.app)
+- **Homepage:** [doclessai](https://doclessai.vercel.app)
 - **GitHub:** [github.com/Dattatray8/doclessai-sdk](https://github.com/Dattatray8/doclessai-sdk)
 - **NPM Package:** [@doclessai/sdk](https://www.npmjs.com/package/@doclessai/sdk)
 
@@ -87,4 +91,4 @@ If you encounter any issues or have questions, please:
 
 ---
 
-Built with ❤️ by the DoclessAI team.
+Built with ❤️
