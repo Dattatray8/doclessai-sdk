@@ -13,5 +13,6 @@ await esbuild.build({
   loader: {
     '.tsx': 'tsx',
     '.ts': 'ts',
-  }
+  },
+  nodePaths: ['node_modules'],
 })
