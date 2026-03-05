@@ -53,7 +53,7 @@ For more control, use the client directly:
 ```typescript
 import { DoclessClient } from '@doclessai/sdk';
 
-const client = new DoclessClient({
+const ai = new DoclessClient({
   appKey: 'your-app-key-here'
 });
  
