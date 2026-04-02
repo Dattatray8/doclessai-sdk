@@ -29,10 +29,11 @@ npm install @doclessai/sdk
 
 ## 🎯 Quick Start
 
-### Using the Chat Widget (React)
+### Using the Chat Widget
 
 The easiest way to add AI chat to your application:
-
+<br/>
+React:
 ```tsx
 import { ChatWidget } from '@doclessai/sdk';
 
@@ -44,6 +45,14 @@ export default function App() {
     </div>
   );
 }
+```
+Html:
+```tsx
+<script 
+  src="https://cdn.jsdelivr.net/npm/@doclessai/sdk@0.3.5/dist/loader.standalone.js"
+  data-app-key="your-app-key-here"
+  data-name="YOUR_ASSISTANT_NAME"
+></script>
 ```
 
 ### Using the DoclessClient
