@@ -41,7 +41,8 @@
   "license": "MIT",
   "dependencies": {
     "react-hot-toast": "^2.6.0",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.13",
