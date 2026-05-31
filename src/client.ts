@@ -18,19 +18,19 @@ export interface AskOptions {
   onError?: (message: string) => void;
 }
 
-export interface DoclessConfig {
+export interface AGBaseConfig {
   appKey: string;
   baseUrl?: string;
 }
 
-export class DoclessClient {
+export class AGBaseClient {
   private appKey: string;
   private baseUrl: string;
 
-  constructor(config: DoclessConfig) {
+  constructor(config: AGBaseConfig) {
     this.appKey = config.appKey;
 
-    this.baseUrl = config.baseUrl || "https://doclessai.vercel.app/api/v1";
+    this.baseUrl = config.baseUrl || "https://agbase.vercel.app/api/v1";
   }
 
   async ask(options: AskOptions): Promise<void> {
@@ -48,7 +48,7 @@ export class DoclessClient {
         formData.append("image", options.file);
       }
 
-      const response = await fetch(`https://doclessai.vercel.app/api/v2/chat`, {
+      const response = await fetch(`https://agbase.vercel.app/api/v2/chat`, {
         method: "POST",
         signal: controller.signal,
         body: formData,
@@ -145,7 +145,9 @@ export class DoclessClient {
         return;
       }
 
-      options.onError?.(error?.message || "Unknown DoclessAI error");
+      options.onError?.(
+        error?.message.message || error?.message || "Unknown AGBase error",
+      );
     }
   }
 }

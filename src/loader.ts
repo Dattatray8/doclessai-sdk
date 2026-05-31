@@ -12,7 +12,7 @@ const init = () => {
     if (!appKey) return;
 
     const div = document.createElement('div');
-    div.id = 'docless-ai-root';
+    div.id = 'agbase-ai-root';
     document.body.appendChild(div);
 
     const root = ReactDOM.createRoot(div);

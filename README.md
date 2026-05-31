@@ -1,12 +1,12 @@
-# DoclessAI SDK
+# AGBase SDK
 
 Plug-and-play AI assistants infrastructure as a service. Seamlessly integrate intelligent AI-powered chat assistants into your applications.
 
-[![npm version](https://img.shields.io/npm/v/@doclessai/sdk)](https://www.npmjs.com/package/@doclessai/sdk)
+[![npm version](https://img.shields.io/npm/v/@agbase/sdk)](https://www.npmjs.com/package/@agbase/sdk)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-**Homepage:** [doclessai](https://doclessai.vercel.app)
+**Homepage:** [agbase](https://agbase.vercel.app)
 
 ## 🚀 Features
 
@@ -16,7 +16,7 @@ Plug-and-play AI assistants infrastructure as a service. Seamlessly integrate in
 - 🔔 **Toast Notifications** - User-friendly feedback for errors and interactions
 - 📱 **Responsive Design** - Works seamlessly on desktop and mobile
 - 🎯 **Type-Safe** - Full TypeScript support with types included
-- 🔧 **Flexible Client** - Use the DoclessClient directly for custom integrations
+- 🔧 **Flexible Client** - Use the AGBaseClient directly for custom integrations
 - 🌐 **Less Configuration** - Works out of the box with minimal setup
 
 ## 📦 Installation
@@ -24,7 +24,7 @@ Plug-and-play AI assistants infrastructure as a service. Seamlessly integrate in
 Install the package using npm, yarn, or pnpm:
 
 ```bash
-npm install @doclessai/sdk
+npm install @agbase/sdk
 ```
 
 ## 🎯 Quick Start
@@ -35,7 +35,7 @@ The easiest way to add AI chat to your application:
 <br/>
 React:
 ```tsx
-import { ChatWidget } from '@doclessai/sdk';
+import { ChatWidget } from '@agbase/sdk';
 
 export default function App() {
   return (
@@ -49,20 +49,20 @@ export default function App() {
 Html:
 ```tsx
 <script 
-  src="https://cdn.jsdelivr.net/npm/@doclessai/sdk@0.3.5/dist/loader.standalone.js"
+  src="https://cdn.jsdelivr.net/npm/@agbase/sdk@0.4.0/dist/loader.standalone.js"
   data-app-key="your-app-key-here"
   data-name="YOUR_ASSISTANT_NAME"
 ></script>
 ```
 
-### Using the DoclessClient
+### Using the AGBaseClient
 
 For more control, use the client directly:
 
 ```typescript
-import { DoclessClient } from '@doclessai/sdk';
+import { AGBaseClient } from '@agbase/sdk';
 
-const ai = new DoclessClient({
+const ai = new AGBaseClient({
   appKey: 'your-app-key-here'
 });
  
@@ -83,9 +83,9 @@ const res = await ai.ask(userQuery, ImageFile);
 
 ## 🔗 Resources
 
-- **Homepage:** [doclessai](https://doclessai.vercel.app)
-- **GitHub:** [github.com/Dattatray8/doclessai-sdk](https://github.com/Dattatray8/doclessai-sdk)
-- **NPM Package:** [@doclessai/sdk](https://www.npmjs.com/package/@doclessai/sdk)
+- **Homepage:** [agbase](https://agbase.vercel.app)
+- **GitHub:** [github.com/agbasehq/agbase-sdk](https://github.com/agbasehq/agbase-sdk)
+- **NPM Package:** [@agbase/sdk](https://www.npmjs.com/package/@agbase/sdk)
 
 ## 👥 Author
 
@@ -94,8 +94,8 @@ const res = await ai.ask(userQuery, ImageFile);
 ## 🙏 Support
 
 If you encounter any issues or have questions, please:
-1. Check the [documentation](https://doclessai.vercel.app/get-started)
-2. Search existing [issues](https://github.com/Dattatray8/doclessai-sdk/issues)
+1. Check the [documentation](https://agbase.vercel.app/docs)
+2. Search existing [issues](https://github.com/agbasehq/agbase-sdk/issues)
 3. Create a new issue with detailed information
 
 ---

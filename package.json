@@ -1,18 +1,18 @@
 {
-  "name": "@doclessai/sdk",
+  "name": "@agbase/sdk",
   "version": "0.4.0",
   "description": "Plug-and-play AI assistants infrastructure as a service.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "homepage": "https://doclessai.vercel.app/",
+  "homepage": "https://agbase.vercel.app/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dattatray8/doclessai-sdk.git"
+    "url": "https://github.com/agbasehq/agbase-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/Dattatray8/doclessai-sdk/issues"
+    "url": "https://github.com/agbasehq/agbase-sdk/issues"
   },
   "exports": {
     ".": {
@@ -35,7 +35,7 @@
     "assistant",
     "rag",
     "gemini",
-    "doclessai"
+    "agbase"
   ],
   "author": "Dattatray",
   "license": "MIT",

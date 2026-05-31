@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useMemo } from "react";
-import { DoclessClient } from "./client.js";
+import { AGBaseClient } from "./client.js";
 import { toast, Toaster } from "react-hot-toast";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from "remark-gfm";
@@ -27,10 +27,10 @@ const highlightElement = (id?: string | null) => {
         block: "center",
     });
 
-    el.classList.add("docless-highlight");
+    el.classList.add("agbase-highlight");
 
     setTimeout(() => {
-        el.classList.remove("docless-highlight");
+        el.classList.remove("agbase-highlight");
     }, 3000);
 };
 
@@ -89,7 +89,7 @@ export default function ChatWidget({
         useRef<HTMLDivElement>(null);
 
     const ai = useMemo(
-        () => new DoclessClient({ appKey }),
+        () => new AGBaseClient({ appKey }),
         [appKey]
     );
 
@@ -345,7 +345,7 @@ export default function ChatWidget({
                         }
                     }
 
-                    .docless-highlight {
+                    .agbase-highlight {
                         animation: pulseHighlight 1.5s ease-out 2;
                         outline: 3px solid #6366f1;
                         border-radius: 8px;
@@ -1047,7 +1047,7 @@ export default function ChatWidget({
                                 marginTop: '10px'
                             }}
                         >
-                            Powered by <strong>DoclessAI</strong>
+                            Powered by <strong>AGBase</strong>
                         </div>
                     </div>
                 </div>

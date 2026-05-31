@@ -4,7 +4,7 @@ node_modules/
 # Build output
 dist/
 
-# Environment variables (Critical for DoclessAI security)
+# Environment variables (Critical for AGBase security)
 .env
 .env.*
 
